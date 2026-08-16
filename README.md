@@ -20,4 +20,3 @@ Secrets must be configured in Vercel and must never be committed to GitHub.
 ## Deployment
 
 The production project is connected to GitHub through Vercel. Changes pushed to `main` create a production deployment automatically; other branches receive preview deployments.
-

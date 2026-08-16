@@ -1,0 +1,10 @@
+{
+  "name": "APHURANTA",
+  "short_name": "Aphuranta OS",
+  "description": "Apparel Operations",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f1eb",
+  "theme_color": "#161714",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
