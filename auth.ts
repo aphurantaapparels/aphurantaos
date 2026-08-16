@@ -6,6 +6,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   session: { strategy: "jwt", maxAge: 60 * 60 * 12 },
   pages: { signIn: "/login" },
+  callbacks: {
+    authorized: async ({ auth: session }) => Boolean(session),
+  },
   providers: [
     Google({
       clientId: process.env.AUTH_GOOGLE_ID ?? "google-client-not-configured",
@@ -29,3 +32,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
 });
+
