@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./os.css";
 
 type RecordItem = { id:string; module:string; title:string; client:string; status:string; amount?:number; qty?:number; due?:string; phone?:string; detail?:string; progress?:number };
@@ -14,11 +14,10 @@ const seed:Store={records:[],activities:[],notifications:[]};
 
 const money=(n=0)=>`৳${new Intl.NumberFormat("en-BD").format(n)}`;
 const wa=(phone="")=>`https://wa.me/${phone.replace(/\D/g,"").replace(/^0/,"880")}`;
-const key="aphuranta-os-clean-v1";
-
 export default function AphurantaOS(){
- const [store,setStore]=useState<Store>(()=>{if(typeof window==="undefined")return seed;try{const saved=localStorage.getItem(key);return saved?JSON.parse(saved):seed}catch{return seed}}); const [active,setActive]=useState("Dashboard"); const [query,setQuery]=useState(""); const [search,setSearch]=useState(false); const [create,setCreate]=useState(false); const [selected,setSelected]=useState<RecordItem|null>(null); const [toast,setToast]=useState(""); const [more,setMore]=useState(false);
- useEffect(()=>{localStorage.setItem(key,JSON.stringify(store))},[store]);
+ const [store,setStore]=useState<Store>(seed); const [active,setActive]=useState("Dashboard"); const [query,setQuery]=useState(""); const [search,setSearch]=useState(false); const [create,setCreate]=useState(false); const [selected,setSelected]=useState<RecordItem|null>(null); const [toast,setToast]=useState(""); const [more,setMore]=useState(false); const databaseReady=useRef(false);
+ useEffect(()=>{let activeRequest=true;fetch("/api/store").then(response=>response.ok?response.json():Promise.reject()).then((data:Store)=>{if(activeRequest)setStore(data)}).catch(()=>{}).finally(()=>{databaseReady.current=true});return()=>{activeRequest=false}},[]);
+ useEffect(()=>{if(!databaseReady.current)return;const timer=window.setTimeout(()=>{fetch("/api/store",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(store)}).catch(()=>{})},350);return()=>window.clearTimeout(timer)},[store]);
  const notify=(x:string)=>{setToast(x);setTimeout(()=>setToast(""),2200)};
  const openModule=(x:string)=>{setActive(x);setSelected(null);setMore(false);window.scrollTo({top:0,behavior:"smooth"})};
  const results=useMemo(()=>{const q=query.toLowerCase().trim();return q?store.records.filter(r=>Object.values(r).join(" ").toLowerCase().includes(q)).slice(0,12):store.records.slice(0,8)},[query,store.records]);
