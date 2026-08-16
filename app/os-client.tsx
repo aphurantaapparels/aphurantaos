@@ -10,31 +10,11 @@ type Store = { records:RecordItem[]; activities:string[]; notifications:string[]
 const modules = ["Dashboard","CRM","Clients","Requirements","Styles","Costings","Quotations","Orders","Production","Samples","Procurement","Calendar","Invoices","Payments","Vendors","Tasks","Files","Reports","Portal","Settings"];
 const icons:Record<string,string>={Dashboard:"⌂",CRM:"◎",Clients:"◉",Requirements:"≡",Styles:"◇",Costings:"৳",Quotations:"▱",Orders:"□",Production:"◆",Samples:"△",Procurement:"⇄",Calendar:"▦",Invoices:"▤",Payments:"$",Vendors:"⬡",Tasks:"✓",Files:"⌁",Reports:"◒",Portal:"↗",Settings:"⚙"};
 const statuses:Record<string,string[]>={CRM:["New Lead","Contacted","Qualified","Requirement Received","Quotation Sent","Negotiation","Sample","Won","Lost"],Orders:["Draft","Awaiting Advance","Confirmed","Pre-production","In Production","QC","Ready","Delivered","Completed"],Production:["Planning","Material Sourcing","Cutting","Printing","Embroidery","Sewing","Finishing","QC","Packing","Ready","Completed"],Quotations:["Draft","Sent","Viewed","Negotiating","Accepted","Rejected","Expired","Converted"],Samples:["Requested","In Development","Ready","Sent to Client","Revision Requested","Approved","Rejected"],Invoices:["Draft","Sent","Partial","Paid","Overdue","Cancelled"],Tasks:["Open","In Progress","Done"],Requirements:["Draft","Costing","Quoted","Ordered"],Costings:["Draft","Approved","Quoted"],Procurement:["Ordered","Partially Received","Received"],Payments:["Received"],Clients:["Active","Inactive"],Vendors:["Active","Review"],Calendar:["Scheduled","Done"],Files:["Available"],Styles:["Active"]};
-const seed:Store={records:[
- {id:"APH-LEAD-2026-0041",module:"CRM",title:"ABC Fashion",client:"Rahim",status:"Quotation Sent",amount:242500,qty:500,due:"Tomorrow",phone:"01712345678",detail:"220 GSM oversized T-shirt"},
- {id:"APH-LEAD-2026-0042",module:"CRM",title:"Urban Thread",client:"Sadia",status:"Qualified",amount:380000,qty:800,due:"20 Aug",phone:"01812345678",detail:"Heavyweight hoodie"},
- {id:"CL-1001",module:"Clients",title:"ABC Fashion",client:"Rahim · Owner",status:"Active",amount:1840000,phone:"01712345678",detail:"3 active orders · ৳105K outstanding"},
- {id:"REQ-1024",module:"Requirements",title:"Oversized Drop Shoulder T-shirt",client:"ABC Fashion",status:"Costing",qty:500,due:"30 Sep",detail:"Cotton compact single jersey · 220 GSM · Black"},
- {id:"APH-ST-0028",module:"Styles",title:"Core Oversized Tee",client:"Unisex",status:"Active",detail:"220 GSM · Single Jersey · S–XXL"},
- {id:"APH-CST-1042-V3",module:"Costings",title:"220 GSM Oversized Tee",client:"ABC Fashion",status:"Approved",amount:1205,detail:"Cost ৳1,004 · Margin 20% · Per piece"},
- {id:"APH-Q-2026-0042",module:"Quotations",title:"Oversized Tee · 500 pcs",client:"ABC Fashion",status:"Accepted",amount:242500,due:"Valid 7 days",detail:"৳485 / pc · 50% advance"},
- {id:"APH-ORD-2026-1042",module:"Orders",title:"Oversized Tee",client:"ABC Fashion",status:"In Production",amount:242500,qty:500,due:"26 Aug",progress:72,detail:"Paid ৳121,250 · Balance ৳121,250"},
- {id:"APH-ORD-2026-1038",module:"Orders",title:"Heavyweight Hoodie",client:"Northstar Retail",status:"QC",amount:384000,qty:320,due:"22 Aug",progress:86,detail:"Paid ৳192,000 · Balance ৳192,000"},
- {id:"APH-PJ-1042",module:"Production",title:"Oversized Tee",client:"ABC Fashion",status:"Sewing",qty:500,due:"26 Aug",progress:72,detail:"Cut 510 · Sewn 360 · Rejected 4"},
- {id:"APH-PJ-1038",module:"Production",title:"Heavyweight Hoodie",client:"Northstar Retail",status:"Finishing",qty:320,due:"22 Aug",progress:86,detail:"Sewn 318 · Finished 290 · Rejected 2"},
- {id:"APH-SMP-1008-V3",module:"Samples",title:"Black Oversized Tee",client:"ABC Fashion",status:"Approved",due:"18 Aug",detail:"Pre-production sample · Version 3"},
- {id:"APH-PO-0241",module:"Procurement",title:"220 GSM Black Fabric",client:"Dhaka Knit Mills",status:"Partially Received",amount:338000,qty:650,due:"19 Aug",detail:"Received 520 kg · Balance 130 kg"},
- {id:"EVT-101",module:"Calendar",title:"Sample review",client:"ABC Fashion",status:"Scheduled",due:"Today · 3:00 PM",detail:"Video meeting · Jahid + Rahim"},
- {id:"APH-INV-2026-1042",module:"Invoices",title:"Final invoice",client:"ABC Fashion",status:"Partial",amount:242500,due:"26 Aug",detail:"Paid ৳121,250 · Outstanding ৳121,250"},
- {id:"PAY-2031",module:"Payments",title:"Bank transfer",client:"ABC Fashion",status:"Received",amount:121250,due:"16 Aug",detail:"Advance · Ref DBBL-88419"},
- {id:"VEN-010",module:"Vendors",title:"Dhaka Knit Mills",client:"Fabric Supplier",status:"Active",detail:"On-time 92% · Rating 4.7 · MOQ 300 kg"},
- {id:"TSK-0281",module:"Tasks",title:"Confirm print strike-off",client:"Mora Studio",status:"Open",due:"Today",detail:"High priority · Assigned to Jahid"},
- {id:"FILE-182",module:"Files",title:"ABC-Tech-Pack-v4.pdf",client:"ABC Fashion",status:"Available",detail:"Requirement REQ-1024 · 4.2 MB"}
-],activities:["Quotation APH-Q-2026-0042 accepted","Black Hoodie sample approved","Payment ৳121,250 received","APH-PJ-1042 moved to Sewing","Invoice APH-INV-2026-1042 sent"],notifications:["Production deadline in 2 days","Sample approved by ABC Fashion","Payment received · ৳121,250"]};
+const seed:Store={records:[],activities:[],notifications:[]};
 
 const money=(n=0)=>`৳${new Intl.NumberFormat("en-BD").format(n)}`;
 const wa=(phone="")=>`https://wa.me/${phone.replace(/\D/g,"").replace(/^0/,"880")}`;
-const key="aphuranta-os-v2";
+const key="aphuranta-os-clean-v1";
 
 export default function AphurantaOS(){
  const [store,setStore]=useState<Store>(()=>{if(typeof window==="undefined")return seed;try{const saved=localStorage.getItem(key);return saved?JSON.parse(saved):seed}catch{return seed}}); const [active,setActive]=useState("Dashboard"); const [query,setQuery]=useState(""); const [search,setSearch]=useState(false); const [create,setCreate]=useState(false); const [selected,setSelected]=useState<RecordItem|null>(null); const [toast,setToast]=useState(""); const [more,setMore]=useState(false);
