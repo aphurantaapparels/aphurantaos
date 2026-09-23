@@ -43,10 +43,11 @@ const dateLabel = (value: string) => new Intl.DateTimeFormat("en-BD", { day: "nu
 const bytes = (value = 0) => value < 1024 * 1024 ? `${Math.max(1, Math.round(value / 1024))} KB` : `${(value / 1024 / 1024).toFixed(1)} MB`;
 
 function normalise(input: Partial<Store>): Store {
+  const records = Array.isArray(input.records) ? input.records.filter((record): record is RecordItem => Boolean(record && (record as RecordItem).kind && (record as RecordItem).title)) : [];
   return {
-    records: Array.isArray(input.records) ? input.records.filter((record): record is RecordItem => Boolean(record && (record as RecordItem).kind && (record as RecordItem).title)) : [],
-    activities: Array.isArray(input.activities) ? input.activities.filter((item): item is string => typeof item === "string") : [],
-    notifications: Array.isArray(input.notifications) ? input.notifications.filter((item): item is string => typeof item === "string") : [],
+    records,
+    activities: records.length && Array.isArray(input.activities) ? input.activities.filter((item): item is string => typeof item === "string") : [],
+    notifications: records.length && Array.isArray(input.notifications) ? input.notifications.filter((item): item is string => typeof item === "string") : [],
   };
 }
 
