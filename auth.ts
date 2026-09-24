@@ -27,6 +27,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const supplied = String(credentials?.password ?? "").trim();
         const expected = String(process.env.ACCESS_PASSWORD ?? "").trim();
         console.warn("[auth] access password configured", { configured: Boolean(expected), length: expected.length });
+        console.warn("[auth] access attempt lengths", { suppliedLength: supplied.length, expectedLength: expected.length });
         if (!expected || supplied.length !== expected.length) {
           const failures = (attempt?.failures || 0) + 1;
           attempts.set(key, { failures, blockedUntil: failures >= maxFailures ? now + blockDurationMs : 0 });
