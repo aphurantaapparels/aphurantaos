@@ -137,3 +137,28 @@ h2 { margin-bottom:6px; font:700 23px/1.1 "Playfair Display",Georgia,serif; }
 .preview-stage .preview-frame { height:60vh; }
 .download-button { text-decoration:none; }
 @media (max-width:900px) { .detail-grid { grid-template-columns:1fr; } }
+
+/* Modern surface treatment */
+.os-work { background:radial-gradient(circle at 85% 0%, rgba(220,90,70,.07), transparent 32rem), var(--paper); }
+.os-sidebar { background:linear-gradient(180deg,#20221f 0%,#2c2e29 100%); border-right:1px solid rgba(255,255,255,.05); }
+.os-top { position:sticky; top:0; z-index:4; background:rgba(251,250,247,.86); backdrop-filter:blur(18px); }
+.metric,.panel { box-shadow:0 12px 30px rgba(43,39,32,.035); }
+.metric:hover,.panel:hover { box-shadow:0 16px 34px rgba(43,39,32,.07); }
+.primary { background:linear-gradient(135deg,#e26650,#ca4e3c); box-shadow:0 8px 18px rgba(220,90,70,.18); }
+.primary:hover { transform:translateY(-1px); box-shadow:0 10px 22px rgba(220,90,70,.25); }
+.detail-actions { display:flex; gap:9px; flex-wrap:wrap; }
+.progress-track { height:7px; background:#eeeae2; border-radius:99px; overflow:hidden; margin:0 0 9px; }
+.progress-track span { display:block; height:100%; background:linear-gradient(90deg,#dc5a46,#efac65); border-radius:inherit; transition:width .35s ease; }
+.connection-count { min-width:27px; text-align:center; }
+.finance-summary { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:22px; }
+.finance-card { border:1px solid var(--line); border-radius:14px; background:#fff; padding:20px; display:flex; flex-direction:column; min-height:132px; box-shadow:0 12px 30px rgba(43,39,32,.035); }
+.finance-card small { color:var(--muted); font-size:12px; }
+.finance-card strong { margin:auto 0 4px; font:700 29px "Playfair Display",Georgia,serif; }
+.finance-card span { color:var(--muted); font-size:11px; }
+.finance-card.positive strong,.money-positive { color:#3b765a; }
+.finance-card.negative strong,.money-negative { color:#b55849; }
+.finance-list .panel-heading { margin-bottom:7px; }
+.money-mark { width:38px; height:38px; flex:0 0 38px; border-radius:11px; display:grid; place-items:center; font-size:19px; font-weight:700; }
+.money-mark.income { background:#dfeee6; color:#3b765a; }.money-mark.expense { background:#f7e2dd; color:#b55849; }
+.row-right > strong { font-size:13px; }
+@media (max-width:640px) { .finance-summary { grid-template-columns:1fr; gap:9px; }.finance-card { min-height:105px; } }
