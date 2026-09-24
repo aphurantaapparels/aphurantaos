@@ -21,7 +21,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   session: { strategy: "jwt", maxAge: 60 * 60 * 12 },
   pages: { signIn: "/login" },
-  callbacks: { authorized: async ({ auth: session }) => session?.user?.id === "aphuranta-owner" },
+  callbacks: {
+    jwt({ token, user }) {
+      if (user?.id === "aphuranta-owner") token.owner = true;
+      return token;
+    },
+    session({ session, token }) {
+      if (token.owner && session.user) (session.user as { id?: string }).id = "aphuranta-owner";
+      return session;
+    },
+    authorized: async ({ auth: session }) => (session?.user as { id?: string } | undefined)?.id === "aphuranta-owner",
+  },
   providers: [
     Credentials({
       name: "Aphuranta access code",
