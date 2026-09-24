@@ -10,6 +10,13 @@ function clientKey(request: Request) {
   return request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown-client";
 }
 
+function normalizeAccessCode(value: unknown) {
+  const code = String(value ?? "").trim();
+  const midpoint = code.length / 2;
+  if (Number.isInteger(midpoint) && midpoint > 0 && code.slice(0, midpoint) === code.slice(midpoint)) return code.slice(0, midpoint);
+  return code;
+}
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
   session: { strategy: "jwt", maxAge: 60 * 60 * 12 },
@@ -24,10 +31,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const now = Date.now();
         const attempt = attempts.get(key);
         if (attempt?.blockedUntil && attempt.blockedUntil > now) return null;
-        const supplied = String(credentials?.password ?? "").trim();
+        const supplied = normalizeAccessCode(credentials?.password);
         const expected = String(process.env.ACCESS_PASSWORD ?? "").trim();
-        console.warn("[auth] access password configured", { configured: Boolean(expected), length: expected.length });
-        console.warn("[auth] access attempt lengths", { suppliedLength: supplied.length, expectedLength: expected.length });
         if (!expected || supplied.length !== expected.length) {
           const failures = (attempt?.failures || 0) + 1;
           attempts.set(key, { failures, blockedUntil: failures >= maxFailures ? now + blockDurationMs : 0 });
